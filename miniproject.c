@@ -22,3 +22,10 @@ void setPixel(int x, int y, char ch) {
         y >= 0 && y < HEIGHT)
         canvas[y][x] = ch;
 }
+void displayCanvas() {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++)
+            printf("%c", canvas[y][x]);
+        printf("\n");
+    }
+}
