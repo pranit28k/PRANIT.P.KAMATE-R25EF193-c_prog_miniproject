@@ -57,3 +57,11 @@ int objectCount = 0;
 /* =========================
    Drawing Functions
    ========================= */
+   void drawLine(int x1, int y1, int x2, int y2, char ch) {
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+
+    int err = dx - dy;
