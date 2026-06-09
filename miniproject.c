@@ -46,3 +46,14 @@ typedef struct {
     int x1, y1;
     int x2, y2;
     int x3, y3;
+  int radius;
+
+    char symbol;
+} Shape;
+
+Shape objects[MAX_OBJECTS];
+int objectCount = 0;
+
+/* =========================
+   Drawing Functions
+   ========================= */
