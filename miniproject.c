@@ -29,3 +29,20 @@ void displayCanvas() {
         printf("\n");
     }
 }
+/* =========================
+   Shape Definitions
+   ========================= */
+
+typedef enum {
+    LINE,
+    RECTANGLE,
+    CIRCLE,
+    TRIANGLE
+} ShapeType;
+
+typedef struct {
+    ShapeType type;
+
+    int x1, y1;
+    int x2, y2;
+    int x3, y3;
