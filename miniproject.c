@@ -131,3 +131,169 @@ void drawTriangle(int x1, int y1,
     drawLine(x2, y2, x3, y3, ch);
     drawLine(x3, y3, x1, y1, ch);
 }
+/* =========================
+   Object Management
+   ========================= */
+
+void addObject(Shape s) {
+    if (objectCount < MAX_OBJECTS)
+        objects[objectCount++] = s;
+}
+
+void deleteObject(int index) {
+    if (index < 0 || index >= objectCount)
+        return;
+
+    for (int i = index; i < objectCount - 1; i++)
+        objects[i] = objects[i + 1];
+
+    objectCount--;
+}
+
+void modifyObject(int index, Shape newShape) {
+    if (index < 0 || index >= objectCount)
+        return;
+
+    objects[index] = newShape;
+}
+
+/* =========================
+   Redraw Scene
+   ========================= */
+
+void redrawScene() {
+    clearCanvas();
+
+    for (int i = 0; i < objectCount; i++) {
+
+        Shape *s = &objects[i];
+
+        switch (s->type) {
+
+        case LINE:
+            drawLine(
+                s->x1, s->y1,
+                s->x2, s->y2,
+                s->symbol);
+            break;
+
+        case RECTANGLE:
+            drawRectangle(
+                s->x1, s->y1,
+                s->x2, s->y2,
+                s->symbol);
+            break;
+
+        case CIRCLE:
+            drawCircle(
+                s->x1, s->y1,
+                s->radius,
+                s->symbol);
+            break;
+
+        case TRIANGLE:
+            drawTriangle(
+                s->x1, s->y1,
+                s->x2, s->y2,
+                s->x3, s->y3,
+                s->symbol);
+            break;
+        }
+    }
+}
+
+/* =========================
+   Utility
+   ========================= */
+
+void printObjects() {
+    printf("\nObjects:\n");
+
+    for (int i = 0; i < objectCount; i++) {
+        printf("%d : ", i);
+
+        switch (objects[i].type) {
+        case LINE:
+            printf("Line\n");
+            break;
+        case RECTANGLE:
+            printf("Rectangle\n");
+            break;
+        case CIRCLE:
+            printf("Circle\n");
+            break;
+        case TRIANGLE:
+            printf("Triangle\n");
+            break;
+        }
+    }
+}
+
+/* =========================
+   Main
+   ========================= */
+
+int main() {
+
+    Shape s;
+
+    /* Add Line */
+    s.type = LINE;
+    s.x1 = 2;  s.y1 = 2;
+    s.x2 = 25; s.y2 = 10;
+    s.symbol = '*';
+    addObject(s);
+
+    /* Add Rectangle */
+    s.type = RECTANGLE;
+    s.x1 = 35; s.y1 = 2;
+    s.x2 = 65; s.y2 = 10;
+    s.symbol = '#';
+    addObject(s);
+
+    /* Add Circle */
+    s.type = CIRCLE;
+    s.x1 = 15;
+    s.y1 = 18;
+    s.radius = 5;
+    s.symbol = 'o';
+    addObject(s);
+
+    /* Add Triangle */
+    s.type = TRIANGLE;
+    s.x1 = 45; s.y1 = 15;
+    s.x2 = 65; s.y2 = 22;
+    s.x3 = 30; s.y3 = 22;
+    s.symbol = '+';
+    addObject(s);
+
+    printf("INITIAL PICTURE\n\n");
+    redrawScene();
+    displayCanvas();
+
+    printObjects();
+
+    /* Delete Rectangle */
+    printf("\nDeleting object 1 (Rectangle)...\n\n");
+    deleteObject(1);
+
+    redrawScene();
+    displayCanvas();
+
+    /* Modify Circle */
+    printf("\nModifying Circle...\n\n");
+
+    Shape newCircle;
+    newCircle.type = CIRCLE;
+    newCircle.x1 = 55;
+    newCircle.y1 = 8;
+    newCircle.radius = 7;
+    newCircle.symbol = '@';
+
+    modifyObject(1, newCircle);
+
+    redrawScene();
+    displayCanvas();
+
+    return 0;
+}
