@@ -288,7 +288,7 @@ int main() {
     newCircle.x1 = 55;
     newCircle.y1 = 8;
     newCircle.radius = 7;
-    newCircle.symbol = '@';
+    newCircle.symbol = '*';
 
     modifyObject(1, newCircle);
 
