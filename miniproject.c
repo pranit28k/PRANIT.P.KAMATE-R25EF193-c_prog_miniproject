@@ -248,7 +248,7 @@ int main() {
     s.type = RECTANGLE;
     s.x1 = 35; s.y1 = 2;
     s.x2 = 65; s.y2 = 10;
-    s.symbol = '#';
+    s.symbol = '*';
     addObject(s);
 
     /* Add Circle */
@@ -256,7 +256,7 @@ int main() {
     s.x1 = 15;
     s.y1 = 18;
     s.radius = 5;
-    s.symbol = 'o';
+    s.symbol = '*';
     addObject(s);
 
     /* Add Triangle */
@@ -264,7 +264,7 @@ int main() {
     s.x1 = 45; s.y1 = 15;
     s.x2 = 65; s.y2 = 22;
     s.x3 = 30; s.y3 = 22;
-    s.symbol = '+';
+    s.symbol = '*';
     addObject(s);
 
     printf("INITIAL PICTURE\n\n");
