@@ -282,6 +282,7 @@ int main() {
 
     /* Modify Circle */
     printf("\nModifying Circle...\n\n");
+    printf("hi");
 
     Shape newCircle;
     newCircle.type = CIRCLE;
