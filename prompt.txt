@@ -272,3 +272,396 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+
+PROMPT 2:
+
+give without ncurses
+
+
+RESPONE 2:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define WIDTH 60
+#define HEIGHT 20
+
+char canvas[HEIGHT][WIDTH];
+
+/* Clear canvas */
+void clearCanvas() {
+    for (int y = 0; y < HEIGHT; y++)
+        for (int x = 0; x < WIDTH; x++)
+            canvas[y][x] = ' ';
+}
+
+/* Plot a point */
+void setPixel(int x, int y, char ch) {
+    if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+        canvas[y][x] = ch;
+}
+
+/* Display canvas */
+void displayCanvas() {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++)
+            printf("%c", canvas[y][x]);
+        printf("\n");
+    }
+}
+
+/* Bresenham line algorithm */
+void drawLine(int x1, int y1, int x2, int y2, char ch) {
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+
+    int err = dx - dy;
+
+    while (1) {
+        setPixel(x1, y1, ch);
+
+        if (x1 == x2 && y1 == y2)
+            break;
+
+        int e2 = 2 * err;
+
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
+        }
+
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
+        }
+    }
+}
+
+/* Rectangle */
+void drawRectangle(int x1, int y1, int x2, int y2, char ch) {
+    drawLine(x1, y1, x2, y1, ch);
+    drawLine(x2, y1, x2, y2, ch);
+    drawLine(x2, y2, x1, y2, ch);
+    drawLine(x1, y2, x1, y1, ch);
+}
+
+/* Circle (Midpoint Circle Algorithm) */
+void drawCircle(int xc, int yc, int r, char ch) {
+    int x = 0;
+    int y = r;
+    int d = 3 - 2 * r;
+
+    while (y >= x) {
+        setPixel(xc + x, yc + y, ch);
+        setPixel(xc - x, yc + y, ch);
+        setPixel(xc + x, yc - y, ch);
+        setPixel(xc - x, yc - y, ch);
+
+        setPixel(xc + y, yc + x, ch);
+        setPixel(xc - y, yc + x, ch);
+        setPixel(xc + y, yc - x, ch);
+        setPixel(xc - y, yc - x, ch);
+
+        x++;
+
+        if (d > 0) {
+            y--;
+            d += 4 * (x - y) + 10;
+        } else {
+            d += 4 * x + 6;
+        }
+    }
+}
+
+/* Triangle */
+void drawTriangle(int x1, int y1,
+                  int x2, int y2,
+                  int x3, int y3,
+                  char ch) {
+    drawLine(x1, y1, x2, y2, ch);
+    drawLine(x2, y2, x3, y3, ch);
+    drawLine(x3, y3, x1, y1, ch);
+}
+
+int main() {
+
+    clearCanvas();
+
+    drawLine(2, 2, 25, 10, '*');
+
+    drawRectangle(30, 2, 50, 10, '#');
+
+    drawCircle(15, 15, 4, 'o');
+
+    drawTriangle(35, 14, 50, 18, 25, 18, '+');
+
+    displayCanvas();
+
+    return 0;
+}
+
+
+
+
+PROMPT 3:
+make a code similar
+ to it giving same otput in 
+ little differnet way
+  
+
+  RESPONE 3:
+
+  #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define ROWS 20
+#define COLS 50
+
+char screen[ROWS][COLS];
+
+/* Initialize canvas */
+void initialize()
+{
+    int i, j;
+
+    for(i = 0; i < ROWS; i++)
+    {
+        for(j = 0; j < COLS; j++)
+        {
+            screen[i][j] = '.';
+        }
+    }
+}
+
+/* Safe plotting */
+void plot(int r, int c)
+{
+    if(r >= 0 && r < ROWS &&
+       c >= 0 && c < COLS)
+    {
+        screen[r][c] = '*';
+    }
+}
+
+/* Display picture */
+void showPicture()
+{
+    int i, j;
+
+    printf("\n");
+
+    for(i = 0; i < ROWS; i++)
+    {
+        for(j = 0; j < COLS; j++)
+        {
+            printf("%c", screen[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+/* Draw line using DDA */
+void drawLine(int r1, int c1, int r2, int c2)
+{
+    int dx = c2 - c1;
+    int dy = r2 - r1;
+
+    int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+
+    float xInc = dx / (float)steps;
+    float yInc = dy / (float)steps;
+
+    float x = c1;
+    float y = r1;
+
+    for(int i = 0; i <= steps; i++)
+    {
+        plot((int)y, (int)x);
+
+        x += xInc;
+        y += yInc;
+    }
+}
+
+/* Draw rectangle */
+void drawRectangle(int row, int col, int width, int height)
+{
+    drawLine(row, col, row, col + width - 1);
+    drawLine(row, col, row + height - 1, col);
+
+    drawLine(row + height - 1,
+             col,
+             row + height - 1,
+             col + width - 1);
+
+    drawLine(row,
+             col + width - 1,
+             row + height - 1,
+             col + width - 1);
+}
+
+/* Draw triangle */
+void drawTriangle(int row, int col, int height)
+{
+    drawLine(row, col, row + height, col - height);
+    drawLine(row, col, row + height, col + height);
+
+    drawLine(row + height,
+             col - height,
+             row + height,
+             col + height);
+}
+
+/* Draw circle */
+void drawCircle(int centerRow,
+                int centerCol,
+                int radius)
+{
+    for(int r = 0; r < ROWS; r++)
+    {
+        for(int c = 0; c < COLS; c++)
+        {
+            int value =
+                (r - centerRow) * (r - centerRow) +
+                (c - centerCol) * (c - centerCol);
+
+            if(abs(value - radius * radius) <= radius)
+            {
+                plot(r, c);
+            }
+        }
+    }
+}
+
+/* Clear canvas */
+void clearPicture()
+{
+    initialize();
+}
+
+int main()
+{
+    int choice;
+
+    initialize();
+
+    while(1)
+    {
+        printf("\n===== SIMPLE DRAWING PROGRAM =====\n");
+        printf("1. Rectangle\n");
+        printf("2. Line\n");
+        printf("3. Triangle\n");
+        printf("4. Circle\n");
+        printf("5. Show Picture\n");
+        printf("6. Clear Picture\n");
+        printf("7. Exit\n");
+
+        printf("Choice : ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+            {
+                int r, c, w, h;
+
+                printf("Row Col Width Height : ");
+                scanf("%d%d%d%d",
+                      &r, &c, &w, &h);
+
+                drawRectangle(r, c, w, h);
+                break;
+            }
+
+            case 2:
+            {
+                int r1, c1, r2, c2;
+
+                printf("r1 c1 r2 c2 : ");
+                scanf("%d%d%d%d",
+                      &r1, &c1,
+                      &r2, &c2);
+
+                drawLine(r1, c1, r2, c2);
+                break;
+            }
+
+            case 3:
+            {
+                int r, c, h;
+
+                printf("Row Col Height : ");
+                scanf("%d%d%d",
+                      &r, &c, &h);
+
+                drawTriangle(r, c, h);
+                break;
+            }
+
+            case 4:
+            {
+                int r, c, rad;
+
+                printf("CenterRow CenterCol Radius : ");
+                scanf("%d%d%d",
+                      &r, &c, &rad);
+
+                drawCircle(r, c, rad);
+                break;
+            }
+
+            case 5:
+                showPicture();
+                break;
+
+            case 6:
+                clearPicture();
+                printf("Picture Cleared!\n");
+                break;
+
+            case 7:
+                printf("Program Ended.\n");
+                return 0;
+
+            default:
+                printf("Invalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+PROMPT 4:
+i am telling the expect object space the "_" 
+should be present
+
+RESPONE 4:
+theo make all the empty spaces appear as _, you only need to change the clearCanvas() function.
+
+Replace this:
+
+void clearCanvas() {
+    for (int y = 0; y < HEIGHT; y++)
+        for (int x = 0; x < WIDTH; x++)
+            canvas[y][x] = ' ';
+}
+
+with:
+
+void clearCanvas() {
+    for (int y = 0; y < HEIGHT; y++)
+        for (int x = 0; x < WIDTH; x++)
+            canvas[y][x] = '_';
+}
