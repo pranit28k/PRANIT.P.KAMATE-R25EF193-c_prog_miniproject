@@ -14,7 +14,7 @@ char canvas[HEIGHT][WIDTH];
 void clearCanvas() {
     for (int y = 0; y < HEIGHT; y++)
         for (int x = 0; x < WIDTH; x++)
-            canvas[y][x] = ' ';
+            canvas[y][x] = '_';
 }
 
 void setPixel(int x, int y, char ch) {
