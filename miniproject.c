@@ -290,7 +290,7 @@ int main() {
     newCircle.y1 = 8;
     newCircle.radius = 7;
     newCircle.symbol = '*';
-    printf("hi");
+    
 
     modifyObject(1, newCircle);
 
